@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Cell from './Cell'
+import { timer } from 'rxjs';
 
 const validate = board => {
     let isValid = true;
@@ -34,17 +35,32 @@ class Board extends Component {
             [true, false, true, false],
             [true, false, false, true],
         ],
-        stateText: ''
+        stateText: '',
+        timer: 0
+    }
+
+    componentDidMount() {
+        this.interval = setInterval(() => {
+            this.setState({ timer: this.state.timer + 1 })
+        }, 1000)
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval)
     }
 
     submit = () => {
         const isValid = validate(this.state.board)
+        if (isValid) {
+            clearInterval(this.interval)
+        }
         this.setState({ stateText: isValid ? 'Board is complete!!' : 'Board is invalod :(' })
     }
 
     render() {
         return (
             <div>
+                <p className="timer">Elapsed Time: {this.state.timer} seconds</p>
                 <div className="board" >
                     {this.state.board.map((row, i) =>
                         row.map((number, j) => (
