@@ -45,6 +45,7 @@ class Board extends Component {
 
     restartBoard = () => {
         this.setState({
+            stateText: '',
             loanding: true
         })
         fetch("https://us-central1-skooldio-courses.cloudfunctions.net/react_01/random").then(resp => {
